@@ -25,7 +25,7 @@ cron "2 0-23/4 * * *" script-path=jd_cash.js,tag=签到领现金
 他的交流群：https://t.me/jdPLA2
 
  */
-const $ = new Env('签到领现金_Panda');
+const $ = new Env('dancerd签到领现金_Panda');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -34,7 +34,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let helpAuthor = true;
 const randomCount = $.isNode() ? 5 : 5;
-let cash_exchange = false;//是否消耗2元红包兑换200京豆，默认否
+let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = []
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
