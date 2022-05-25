@@ -5,7 +5,7 @@ Last Modified time: 2022-1-21
 更新地址：jd_ms.js
 已支持IOS双京东账号, Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
-仅签到，不做任务
+不能成功领取京东秒杀连签红包,可能不是签到脚本
 ============Quantumultx===============
 [task_local]
 #搞鸡玩家-秒秒币
@@ -84,7 +84,7 @@ async function jdMs() {
   if ($.encryptProjectId) {
       console.log(`领红包签到`)
       await readpacksign()
-    // await getTaskList() // dancerd
+      await getTaskList() // dancerd
   }
   await getUserInfo(false)
   
@@ -126,6 +126,7 @@ function getUserInfo(info=true) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
+            console.log(`getUserInfo() data.code = ${data.code}`)  // added by dancerd             
             if (data.code === 2041) {
               $.score = data.result.assignment.assignmentPoints || 0
               if(info) console.log(`当前秒秒币${$.score}`)
@@ -167,10 +168,14 @@ function getTaskList() {
                         "actionType": 1,
                         "completionFlag": ""
                       }
-                      await doTask(body)  // commitment by dancerd
+                      await doTask(body)
+                      console.log(`wait 5000`)  // added by dancerd
+                      await $.wait(5000)  // added by dancerd                      
                       await $.wait(vo['ext']['waitDuration'] * 1000 + 500)
                       body['actionType'] = 0
-                      await doTask(body)  // commitment by dancerd
+                      await doTask(body)
+                      console.log(`wait 5000`)  // added by dancerd
+                      await $.wait(5000)  // added by dancerd
                     }
                   } else if (vo['assignmentType'] === 0) {
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
@@ -181,8 +186,9 @@ function getTaskList() {
                         "actionType": "0",
                         "completionFlag": true
                       }
-                      await doTask(body)  // commitment by dancerd
-                      await $.wait(1000)
+                      await doTask(body)  
+                      console.log(`wait 5000`)  // commitment by dancerd
+                      await $.wait(5000)   // original 1000, modified as 5000 by dancerd
                     }
                   } else if (vo['assignmentType'] === 3) {
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
@@ -193,8 +199,9 @@ function getTaskList() {
                         "actionType": 0,
                         "completionFlag": ""
                       }
-                      await doTask(body) // commitment by dancerd
-                      await $.wait(1000)
+                      await doTask(body)
+                      console.log(`wait 5000`)  // commitment by dancerd 
+                      await $.wait(5000)  // original 1000, modified as 5000 by dancerd
                     }
                   }
                 }
@@ -251,7 +258,13 @@ function tttsign() {
             if (data.code === 0) {
               rewardsInfo = data.rewardsInfo.failRewards[0].msg
               console.log(`${rewardsInfo}`)
-            }else console.log(data.msg)
+            }else 
+            {
+              console.log(`tttsign() data.code = ${data.code}`)  // added by dancerd
+              console.log(`data = ${data}`)  // added by dancerd              
+              console.log(data.msg)
+              console.log(`tttsign() data.code is not 0`)  // added by dancerd              
+            }
           }
         }
       } catch (e) {
@@ -295,7 +308,7 @@ function readpacksign() {
 function showMsg() {
   return new Promise(resolve => {
     message += `本次运行获得秒秒币${$.score-$.cur}枚，共${$.score}枚`;
-    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
+    $.msg($.name, '', `京东账号${$.index}  ${$.nickName}\n${message}`);
     resolve()
   })
 }
