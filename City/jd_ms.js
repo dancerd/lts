@@ -242,7 +242,7 @@ function doTask(body) {
         $.logErr(e, resp)
       } finally {
         console.log(`doTask finally wait 6000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
-        await $.wait(6000)  // added by dancerd        
+        // how to wait a few seconds, added by dancerd    
         resolve(data);
       }
     })
