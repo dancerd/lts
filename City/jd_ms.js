@@ -167,10 +167,10 @@ function getTaskList() {
                         "actionType": 1,
                         "completionFlag": ""
                       }
-                      // await doTask(body)  // commitment by dancerd
+                      await doTask(body)  // commitment by dancerd
                       await $.wait(vo['ext']['waitDuration'] * 1000 + 500)
                       body['actionType'] = 0
-                      // await doTask(body)  // commitment by dancerd
+                      await doTask(body)  // commitment by dancerd
                     }
                   } else if (vo['assignmentType'] === 0) {
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
@@ -181,7 +181,7 @@ function getTaskList() {
                         "actionType": "0",
                         "completionFlag": true
                       }
-                      // await doTask(body)  // commitment by dancerd
+                      await doTask(body)  // commitment by dancerd
                       await $.wait(1000)
                     }
                   } else if (vo['assignmentType'] === 3) {
@@ -193,7 +193,7 @@ function getTaskList() {
                         "actionType": 0,
                         "completionFlag": ""
                       }
-                      // await doTask(body) // commitment by dancerd
+                      await doTask(body) // commitment by dancerd
                       await $.wait(1000)
                     }
                   }
@@ -277,7 +277,11 @@ function readpacksign() {
             if (data.code === 200) {
               rewardsInfo = data.result.assignmentResult.msg
               console.log(`${rewardsInfo}`)
-            }else console.log("今日签到红包已领")
+            }else {
+              console.log(`data.code = ${data.code}`)  // added by dancerd
+              console.log("今日签到红包已领")
+              console.log(`data = ${data}`)  // added by dancerd
+            }
           }
         }
       } catch (e) {
