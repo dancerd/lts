@@ -27,6 +27,8 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 var timestamp = Math.round(new Date().getTime()).toString();
+var today = new Date();  // added by dancerd
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
@@ -158,10 +160,10 @@ function getTaskList() {
               for (let vo of data.assignmentList) {
                 if($.risk) break
                 if (vo['completionCnt'] < vo['assignmentTimesLimit']) {
-                  if (vo['assignmentType'] === 1) {
+                  if (vo['assignmentType'] === 1) {  // 浏览秒杀超值好物, added by dancerd
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": vo['ext'][vo['ext']['extraType']][i]['itemId'],
@@ -169,17 +171,18 @@ function getTaskList() {
                         "completionFlag": ""
                       }
                       await doTask(body)
-                      console.log(`wait 5000`)  // added by dancerd
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // added by dancerd                      
                       await $.wait(vo['ext']['waitDuration'] * 1000 + 500)
+                      console.log(`assignmentType = ${vo['assignmentType']}, to modify body['actionType'] as 0`)
                       body['actionType'] = 0
                       await doTask(body)
-                      console.log(`wait 5000`)  // added by dancerd
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // added by dancerd
                     }
                   } else if (vo['assignmentType'] === 0) {
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": "",
@@ -187,12 +190,12 @@ function getTaskList() {
                         "completionFlag": true
                       }
                       await doTask(body)  
-                      console.log(`wait 5000`)  // commitment by dancerd
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
                       await $.wait(5000)   // original 1000, modified as 5000 by dancerd
                     }
                   } else if (vo['assignmentType'] === 3) {
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": vo['ext'][vo['ext']['extraType']][i]['itemId'],
@@ -200,7 +203,7 @@ function getTaskList() {
                         "completionFlag": ""
                       }
                       await doTask(body)
-                      console.log(`wait 5000`)  // commitment by dancerd 
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // original 1000, modified as 5000 by dancerd
                     }
                   }
@@ -238,6 +241,8 @@ function doTask(body) {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
+        console.log(`doTask finally wait 6000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+        await $.wait(6000)  // added by dancerd        
         resolve(data);
       }
     })
@@ -262,7 +267,7 @@ function tttsign() {
             {
               console.log(`tttsign() data.code = ${data.code}`)  // added by dancerd
               console.log(`data = ${data}`)  // added by dancerd              
-              console.log(data.msg)
+              console.log(data.msg)  // data.msg === 项目已结束, added by dancerd
               console.log(`tttsign() data.code is not 0`)  // added by dancerd              
             }
           }
