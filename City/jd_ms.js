@@ -163,6 +163,7 @@ function getTaskList() {
                   if (vo['assignmentType'] === 1) {  // 会场，商品，或活动， added by dancerd
                     // 成功： 全品类通用券场，888元锦鲤红包，点点券兑现金红包
                     // 其它Failed: 浏览秒杀超值好物, added by dancerd
+                    /*
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
@@ -184,9 +185,11 @@ function getTaskList() {
                       var today = new Date();  // added by dancerd
                       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                      
                       console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
-                      await $.wait(5000)  // added by dancerd
+                      await $.wait(5000)  // added by dancerd                     
                     }
+                    */
                   } else if (vo['assignmentType'] === 0) { // 分享秒杀领红包活动, Failed: 活动太火爆了, added by dancerd
+                    /*
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
@@ -199,9 +202,11 @@ function getTaskList() {
                       var today = new Date();  // added by dancerd
                       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                       
                       console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
-                      await $.wait(5000)   // original 1000, modified as 5000 by dancerd
+                      await $.wait(5000)   // original 1000, modified as 5000 by dancerd                      
                     }
+                    */
                   } else if (vo['assignmentType'] === 3) {  // 关注秒杀优选店铺, Failed: 活动太火爆了, added by dancerd
+                    //
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
@@ -234,7 +239,10 @@ function getTaskList() {
 }
 
 function doTask(body) {
-  var timestamp = Math.round(new Date().getTime()).toString(); // added by dancerd, so many task failed, maybe timestamp is the reason, the value of timestamp in the original script is fixed
+  var today = new Date();  // added by dancerd
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
+  console.log(`doTask begin,  time = ${time}`)  // added by dancerd  
+  // var timestamp = Math.round(new Date().getTime()).toString(); // added by dancerd, so many task failed,  still failed
   body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": sourceCode, "ext": {},"extParam":{"businessData":{"random":25500725},"signStr":timestamp+"~1hj9fq9","sceneid":"MShPageh5"} }
   return new Promise(resolve => {
     $.post(taskPostUrl('doInteractiveAssignment', body), (err, resp, data) => {
