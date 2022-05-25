@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-cron: 35 15 * * *
+cron: 35 6 * * *
 new Env('dancerd发财挖宝');
 活动入口: 京东极速版>我的>发财挖宝
 脚本功能为: 挖宝，不提现，没有助力功能! 
