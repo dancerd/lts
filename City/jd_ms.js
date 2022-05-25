@@ -160,7 +160,9 @@ function getTaskList() {
               for (let vo of data.assignmentList) {
                 if($.risk) break
                 if (vo['completionCnt'] < vo['assignmentTimesLimit']) {
-                  if (vo['assignmentType'] === 1) {  // 浏览秒杀超值好物, added by dancerd
+                  if (vo['assignmentType'] === 1) {  // 会场，商品，或活动， added by dancerd
+                    // 成功： 全品类通用券场，888元锦鲤红包，点点券兑现金红包
+                    // 其它Failed: 浏览秒杀超值好物, added by dancerd
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
@@ -171,16 +173,20 @@ function getTaskList() {
                         "completionFlag": ""
                       }
                       await doTask(body)
-                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                      
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // added by dancerd                      
                       await $.wait(vo['ext']['waitDuration'] * 1000 + 500)
                       console.log(`assignmentType = ${vo['assignmentType']}, to modify body['actionType'] as 0`)
                       body['actionType'] = 0
                       await doTask(body)
-                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                      
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // added by dancerd
                     }
-                  } else if (vo['assignmentType'] === 0) {
+                  } else if (vo['assignmentType'] === 0) { // 分享秒杀领红包活动, Failed: 活动太火爆了, added by dancerd
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
@@ -189,11 +195,13 @@ function getTaskList() {
                         "actionType": "0",
                         "completionFlag": true
                       }
-                      await doTask(body)  
-                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+                      await doTask(body)
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                       
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)   // original 1000, modified as 5000 by dancerd
                     }
-                  } else if (vo['assignmentType'] === 3) {
+                  } else if (vo['assignmentType'] === 3) {  // 关注秒杀优选店铺, Failed: 活动太火爆了, added by dancerd
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
                       let body = {
@@ -203,7 +211,9 @@ function getTaskList() {
                         "completionFlag": ""
                       }
                       await doTask(body)
-                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd                      
+                      console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // original 1000, modified as 5000 by dancerd
                     }
                   }
@@ -224,6 +234,7 @@ function getTaskList() {
 }
 
 function doTask(body) {
+  var timestamp = Math.round(new Date().getTime()).toString(); // added by dancerd, so many task failed, maybe timestamp is the reason, the value of timestamp in the original script is fixed
   body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": sourceCode, "ext": {},"extParam":{"businessData":{"random":25500725},"signStr":timestamp+"~1hj9fq9","sceneid":"MShPageh5"} }
   return new Promise(resolve => {
     $.post(taskPostUrl('doInteractiveAssignment', body), (err, resp, data) => {
@@ -234,14 +245,16 @@ function doTask(body) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data)
-            console.log(data.msg)
+            console.log(data.msg) // 活动太火爆了/任务完成/任务已完成
             if(data.msg==='风险等级未通过') $.risk =1
           }
         }
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        console.log(`doTask finally wait 6000, timestamp = ${timestamp}, time = ${time}`)  // added by dancerd
+        var today = new Date();  // added by dancerd
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
+        console.log(`doTask finally,  time = ${time}`)  // added by dancerd
         // how to wait a few seconds, added by dancerd    
         resolve(data);
       }
