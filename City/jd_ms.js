@@ -166,7 +166,9 @@ function getTaskList() {
                     /*
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd 
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}, time = ${time}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": vo['ext'][vo['ext']['extraType']][i]['itemId'],
@@ -191,7 +193,9 @@ function getTaskList() {
                   } else if (vo['assignmentType'] === 0) { // 分享秒杀领红包活动, Failed: 活动太火爆了, added by dancerd
                     /*
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd 
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}, time = ${time}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": "",
@@ -208,7 +212,9 @@ function getTaskList() {
                   } else if (vo['assignmentType'] === 3) {  // 关注秒杀优选店铺, Failed: 活动太火爆了, added by dancerd
                     //
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}`)
+                      var today = new Date();  // added by dancerd
+                      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd 
+                      console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}, time = ${time}`)
                       let body = {
                         "encryptAssignmentId": vo['encryptAssignmentId'],
                         "itemId": vo['ext'][vo['ext']['extraType']][i]['itemId'],
