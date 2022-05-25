@@ -244,36 +244,68 @@ function getTaskList() {
   })
 }
 
+// function requests() is copied from KR/jd_fruit_task.js
+function request(function_id, body = {}, timeout = 1000) {
+  return new Promise(resolve => {
+      setTimeout(() => {
+          $.get(taskUrl(function_id, body), (err, resp, data) => {
+              try {
+                  if (err) {
+                      console.log('\n东东农场: API查询请求失败 ‼️‼️')
+                      console.log(JSON.stringify(err));
+                      console.log(`function_id:${function_id}`)
+                      $.logErr(err);
+                  } else {
+                      if (safeGet(data)) {
+                          data = JSON.parse(data);
+                      }
+                  }
+              } catch (e) {
+                  $.logErr(e, resp);
+              } finally {
+                  resolve(data);
+              }
+          })
+      }, timeout)
+  })
+}
+
 function doTask(body) {
   var today = new Date();  // added by dancerd
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
-  console.log(`doTask begin,  time = ${time}`)  // added by dancerd  
+  console.log(`doTask begin,  time = ${time}`)  // added by dancerd 
+  timeout = 3000
   // var timestamp = Math.round(new Date().getTime()).toString(); // added by dancerd, so many task failed,  still failed
   body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": sourceCode, "ext": {},"extParam":{"businessData":{"random":25500725},"signStr":timestamp+"~1hj9fq9","sceneid":"MShPageh5"} }
   return new Promise(resolve => {
-    $.post(taskPostUrl('doInteractiveAssignment', body), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${err},${jsonParse(resp.body)['message']}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            data = JSON.parse(data)
-            console.log(data.msg) // 活动太火爆了/任务完成/任务已完成
-            if(data.msg==='风险等级未通过') $.risk =1
+    setTimeout(() => {  // added by dancerd
+      var today = new Date();  // added by dancerd
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
+      console.log(`setTimeout begin,  time = ${time}`)  // added by dancerd
+      $.post(taskPostUrl('doInteractiveAssignment', body), (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${err},${jsonParse(resp.body)['message']}`)
+            console.log(`${$.name} API请求失败，请检查网路重试`)
+          } else {
+            if (safeGet(data)) {
+              data = JSON.parse(data)
+              console.log(data.msg) // 活动太火爆了/任务完成/任务已完成
+              if(data.msg==='风险等级未通过') $.risk =1
+            }
           }
+        } catch (e) {
+          $.logErr(e, resp)
+        } finally {
+          var today = new Date();  // added by dancerd
+          var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
+          console.log(`doTask finally,  time = ${time}`)  // added by dancerd
+          // how to wait a few seconds, added by dancerd    
+          resolve(data);
         }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        var today = new Date();  // added by dancerd
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd        
-        console.log(`doTask finally,  time = ${time}`)  // added by dancerd
-        // how to wait a few seconds, added by dancerd    
-        resolve(data);
-      }
+      })
     })
-  })
+  }, timeout)  // end setTimeout(() => {
 }
 
 function tttsign() {
