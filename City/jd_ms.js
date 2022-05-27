@@ -166,12 +166,12 @@ function getTaskList() {
                     //
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      if (vo['assignmentName'] === `全品类通用券场`) {
+                      if (vo['assignmentName'] === '领全品类通用券') {
                         console.log(`${vo['assignmentName']}`)
-                      } else if (vo['assignmentName'] === '888元锦鲤红包') {
+                      } else if (vo['assignmentName'] === '领888元锦鲤红包') {
                         console.log(`${vo['assignmentName']}`)
                       }
-                      else if (vo['assignmentName'] === '点点券兑现金红包') {
+                      else if (vo['assignmentName'] === '领点点券兑现金红包') {
                         console.log(`${vo['assignmentName']}`)
                       } else {
                         console.log(`${vo['assignmentName']}`)
