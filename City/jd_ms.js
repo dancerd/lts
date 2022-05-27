@@ -166,7 +166,7 @@ function getTaskList() {
                     //
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
-                      if (vo['assignmentName'] === '全品类通用券场') {
+                      if (vo['assignmentName'] === `全品类通用券场`) {
                         console.log(`${vo['assignmentName']}`)
                       } else if (vo['assignmentName'] === '888元锦鲤红包') {
                         console.log(`${vo['assignmentName']}`)
@@ -174,6 +174,7 @@ function getTaskList() {
                       else if (vo['assignmentName'] === '点点券兑现金红包') {
                         console.log(`${vo['assignmentName']}`)
                       } else {
+                        // console.log(`${vo['assignmentName']}`)
                         continue;
                       }
                       var today = new Date();  // added by dancerd
