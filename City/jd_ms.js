@@ -174,7 +174,7 @@ function getTaskList() {
                       else if (vo['assignmentName'] === '点点券兑现金红包') {
                         console.log(`${vo['assignmentName']}`)
                       } else {
-                        // console.log(`${vo['assignmentName']}`)
+                        console.log(`${vo['assignmentName']}`)
                         continue;
                       }
                       var today = new Date();  // added by dancerd
