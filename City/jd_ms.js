@@ -65,7 +65,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         }
         continue
       }
-      await tttsign()
+      // await tttsign()  // commitment by dancered, 项目已失效，跳过
       await jdMs()
     }
   }
@@ -163,9 +163,19 @@ function getTaskList() {
                   if (vo['assignmentType'] === 1) {  // 会场，商品，或活动， added by dancerd
                     // 成功： 全品类通用券场，888元锦鲤红包，点点券兑现金红包
                     // 其它Failed: 浏览秒杀超值好物, added by dancerd
-                    /*
+                    //
                     if(vo['ext'][vo['ext']['extraType']].length === 0) continue;
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
+                      if (vo['assignmentName'] === '全品类通用券场') {
+                        console.log(`${vo['assignmentName']}`)
+                      } else if (vo['assignmentName'] === '888元锦鲤红包') {
+                        console.log(`${vo['assignmentName']}`)
+                      }
+                      else if (vo['assignmentName'] === '点点券兑现金红包') {
+                        console.log(`${vo['assignmentName']}`)
+                      } else {
+                        continue;
+                      }
                       var today = new Date();  // added by dancerd
                       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd 
                       console.log(`assignmentType = ${vo['assignmentType']}, 去做${vo['assignmentName']}任务：${i + 1}/${vo['assignmentTimesLimit']}, time = ${time}`)
@@ -189,7 +199,7 @@ function getTaskList() {
                       console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // added by dancerd                     
                     }
-                    */
+                    //
                   } else if (vo['assignmentType'] === 0) { // 分享秒杀领红包活动, Failed: 活动太火爆了, added by dancerd
                     /*
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
@@ -210,7 +220,7 @@ function getTaskList() {
                     }
                     */
                   } else if (vo['assignmentType'] === 3) {  // 关注秒杀优选店铺, Failed: 活动太火爆了, added by dancerd
-                    //
+                    /*
                     for (let i = vo['completionCnt']; i < vo['assignmentTimesLimit']; ++i) {
                       var today = new Date();  // added by dancerd
                       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  // added by dancerd 
@@ -227,6 +237,7 @@ function getTaskList() {
                       console.log(`assignmentType = ${vo['assignmentType']}, wait 5000, time = ${time}`)  // added by dancerd
                       await $.wait(5000)  // original 1000, modified as 5000 by dancerd
                     }
+                    */
                   }
                 }
               }
