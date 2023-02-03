@@ -57,7 +57,7 @@ if ($.isNode()) {
       await getHome()
       if ($.isNormal) {
         // await getExchangequery()
-        await getExchange()
+        // await getExchange()
         if ( true ) {
           // 不确定cash.id是不是每天都一样的。
           // 20元 cash.id  7ea791839f7fe3168150396e51e30917
