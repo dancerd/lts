@@ -65,7 +65,7 @@ if ($.isNode()) {
             if (cash.name === '100元现金') {
               continue
             }
-            console.log('去提现 -> '+cash.name)
+            console.log('去提现 -> '+cash.name+', cash.id = '+cash.id)
             await getExchangeOut(cash.id)
           }
         }
