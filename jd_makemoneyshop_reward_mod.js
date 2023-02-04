@@ -56,6 +56,7 @@ if ($.isNode()) {
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
       // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
       if ($.isNormal) {
+        // 如果cash.id每天不一样，则getExchangequery不可略过
         await getExchangequery()
         //await getExchange()
         if (cashout) {
