@@ -41,9 +41,9 @@ if ($.isNode()) {
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
-      $.isNormal = false
+      $.isNormal = true  // ace修改isNormal为true
       message = '';
-      await TotalBean();
+      // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -54,7 +54,7 @@ if ($.isNode()) {
       }
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-      await getHome()
+      // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
       if ($.isNormal) {
         await getExchangequery()
         //await getExchange()
@@ -65,6 +65,12 @@ if ($.isNode()) {
             if (cash.name === '100元现金') {
               continue
             }
+            if (cash.name === '1元现金') {
+              continue
+            }
+            if (cash.name === '0.3元现金') {
+              continue
+            }                        
             console.log('去提现 -> '+cash.name)
             await getExchangeOut(cash.id)
           }
@@ -97,6 +103,8 @@ async function getHome(){
             if (data.data && data.code === 0) {
               $.isNormal = true
               // console.log('白号')
+            } else {
+              $.isNormal = false
             }
           } else {
             console.log(`京东服务器返回空数据`)
