@@ -9,7 +9,7 @@
 指定某个ck或者某些ck task jd_fruit.js desi JD_COOKIE 1 或者 task jd_fruit.js desi JD_COOKIE 1-5
 
 */
-const $ = new Env("赚钱大赢家提现mod");
+const $ = new Env("赚钱大赢家提现test");
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -57,6 +57,8 @@ if ($.isNode()) {
       // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
       if ($.isNormal) {
         // 如果cash.id每天不一样，则getExchangequery不可略过
+        // cash.id 2月4日和2月5日都一样
+        // 如果getExchangequery()超时，则cashout仍为空，下面提现逻辑根本不会执行
         await getExchangequery()
         //await getExchange()
         if (cashout) {
@@ -223,18 +225,14 @@ async function getExchangeOut(id){
             data = JSON.parse(data);
             if (data.data) {
               console.log(data)
-            } else {
-              console.log('getExchangeOut No data.data')
             }
           } else {
             console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
-        console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
-        console.log('getExchangeOut finaly resolve')
         resolve();
       }
     })
