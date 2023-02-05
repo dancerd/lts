@@ -243,9 +243,16 @@ async function getExchangeOut(id){
         } else {
           if (data) {
             data = JSON.parse(data);
+            var today = new Date();
+            var now = today.toLocaleString();
+            console.log(now);  
+            console.log('getExchangeOut has data:')
+            console.log(data)  // { traceId: '1938246.55268.16756163431836805', ret: 232, msg: '日库存不足' }
+            // { traceId: '1452973.55268.16756163436058014', ret: 224, msg: '库存不足' }
             if (data.data) {
-              console.log('getExchangeOut data:')
+              console.log('getExchangeOut has data.data')
               console.log(data)
+              // {traceId: '1453299.55268.16756163427657642', ret: 223, msg: '积分不足', data: { curScore: 1120, diffScore: 880 }}
             } else {
               console.log('getExchangeOut No data.data')
             }
@@ -257,11 +264,10 @@ async function getExchangeOut(id){
         console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
-        console.log('getExchangeOut finaly resolve')
         var today = new Date();
         var now = today.toLocaleString();
         console.log(now);  
-        console.log('getExchangeOut finaly resolve end time.')              
+        console.log('getExchangeOut finaly resolve.')              
         resolve();
       }
     })

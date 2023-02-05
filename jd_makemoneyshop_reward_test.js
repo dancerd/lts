@@ -71,6 +71,7 @@ if ($.isNode()) {
           cashout = cashout.reverse()
           // console.log(cashout)
           for (const cash of cashout) {
+            /*
             if (cash.name === '100元现金') {
               continue
             }
@@ -80,6 +81,7 @@ if ($.isNode()) {
             if (cash.name === '0.3元现金') {
               continue
             }
+            */
             console.log(' ')
             var today = new Date();
             var now = today.toLocaleString();
@@ -237,6 +239,9 @@ async function getExchangeOut(id){
         } else {
           if (data) {
             data = JSON.parse(data);
+            var today = new Date();
+            var now = today.toLocaleString();
+            console.log(now);  
             console.log('getExchangeOut has data:')
             console.log(data)            
             if (data.data) {
