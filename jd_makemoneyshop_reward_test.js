@@ -44,6 +44,9 @@ if ($.isNode()) {
       $.isNormal = true  // ace修改isNormal为true
       message = '';
       // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
+      var today = new Date();
+      var now = today.toLocaleString();
+      console.log(now);      
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
