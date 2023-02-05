@@ -1,7 +1,7 @@
 /*
-赚钱大赢家提现
+赚钱大赢家兑换50
 
-58 59 23 * * * jd_makemoneyshop_reward.js
+58 59 23 * * * jd_makemoneyshop_getred.js
 
 默认不执行
 默认只执行1个ck,多账号请单独指定ck
@@ -9,7 +9,7 @@
 指定某个ck或者某些ck task jd_fruit.js desi JD_COOKIE 1 或者 task jd_fruit.js desi JD_COOKIE 1-5
 
 */
-const $ = new Env("赚钱大赢家提现mod");
+const $ = new Env("大赢家兑50红包");
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -31,7 +31,7 @@ if ($.isNode()) {
     return;
   }
   if (isCashOut === false) {
-    console.log('[赚钱大赢家提现]默认不执行,需要执行 isCashOut 设置为 true,更多说明看注释')
+    console.log('默认不执行,需要执行 isCashOut 设置为 true,更多说明看注释')
     return
   }
   for (let i = 0; i < 1; i++) {
@@ -41,12 +41,9 @@ if ($.isNode()) {
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
-      $.isNormal = true  // ace修改isNormal为true
+      $.isNormal = false
       message = '';
-      // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
-      var today = new Date();
-      var now = today.toLocaleString();
-      console.log(now);      
+      await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -57,48 +54,9 @@ if ($.isNode()) {
       }
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-      // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
-      // cash.id 2月4日和2月5日都一样
-      // 如果getExchangequery()超时，则cashout仍为空，下面提现逻辑根本不会执行      
-      if ($.isNormal) {
-        // 如果cash.id每天不一样，则getExchangequery不可略过
-        // await getExchangequery()
-        //await getExchange()
-        if ( true ) {
-          // 不确定cash.id是不是每天都一样的。
-          // 20元 cash.id  7ea791839f7fe3168150396e51e30917  库存不足
-          // 8 元 cash.id  da3fc8218d2d1386d3b25242e563acb8  日库存不足
-          // 3 元 cash.id  53515f286c491d66de3e01f64e3810b2  库存不足
-          // 1 元 cash.id   dac84c6bf0ed0ea9da2eca4694948440  日库存不足
-          cashids = ['da3fc8218d2d1386d3b25242e563acb8', 'dac84c6bf0ed0ea9da2eca4694948440', '7ea791839f7fe3168150396e51e30917',  '53515f286c491d66de3e01f64e3810b2']
-          for (const cashid of cashids) {
-            console.log(' ')            
-            var today = new Date();
-            var now = today.toLocaleString();
-            console.log(now);
-            console.log('去提现 -> '+', cashid = '+cashid)
-            await getExchangeOut(cashid)
-          }
-        } 
-        /*       
-        if (cashout) {
-          cashout = cashout.reverse()
-          // console.log(cashout)
-          for (const cash of cashout) {
-            if (cash.name === '100元现金') {
-              continue
-            }
-            if (cash.name === '1元现金') {
-              continue
-            }
-            if (cash.name === '0.3元现金') {
-              continue
-            }                        
-            console.log('去提现 -> '+cash.name)
-            await getExchangeOut(cash.id)
-          }
-        }
-        */
+	  for (let i of Array(3)){
+	    getred();
+		await $.wait(200);
       }
     }
   }
@@ -127,8 +85,6 @@ async function getHome(){
             if (data.data && data.code === 0) {
               $.isNormal = true
               // console.log('白号')
-            } else {
-              $.isNormal = false
             }
           } else {
             console.log(`京东服务器返回空数据`)
@@ -167,7 +123,7 @@ async function getExchangequery(){
               // console.log(data.data.exchangeRuleList)
               if (data.data.cashExchangeRuleList) {
                 for (const vo of data.data.cashExchangeRuleList) {
-                    console.log(vo)
+                  // console.log(vo)
                   //if (vo.exchangeStatus === 1 && vo.cashoutAmount <= data.data.canUseCoinAmount) {
                     //console.log('可提现 -> ', vo.name)
                     cashout.push(vo)
@@ -188,46 +144,12 @@ async function getExchangequery(){
   })
 }
 
-async function getExchange(){
-  return new Promise(async resolve => {
-    const options = {
-      url: `https://wq.jd.com/prmt_exchange/client/exchange/list-record?g_ty=h5&g_tk=&appCode=msc588d6d5&bizCode=makemoneyshop&exchangeType=2&current=1&size=20&sceneval=2`,
-      headers: {
-        'Accept':'*/*',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
-        'Cookie': cookie,
-        'Referer': 'https://wqs.jd.com/',
-        "User-Agent": `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
-      }
-    }
-    $.get(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data.data && data.ret === 0) {
-              // console.log(data.data.records)
-            }
-          } else {
-            console.log(`京东服务器返回空数据`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
 
-async function getExchangeOut(id){
+
+async function getred(){
   return new Promise(async resolve => {
     const options = {
-      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=msc588d6d5&bizCode=makemoneyshop&ruleId=${id}&sceneval=2`,
+      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=b0795152caef79b07ba0e1d7482be60e&sceneval=2`,
       headers: {
         'Accept':'*/*',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -243,32 +165,14 @@ async function getExchangeOut(id){
           console.log(`${JSON.stringify(err)}`)
         } else {
           if (data) {
-            data = JSON.parse(data);
-            var today = new Date();
-            var now = today.toLocaleString();
-            console.log(now);  
-            console.log('getExchangeOut has data:')
-            console.log(data)  // { traceId: '1938246.55268.16756163431836805', ret: 232, msg: '日库存不足' }
-            // { traceId: '1452973.55268.16756163436058014', ret: 224, msg: '库存不足' }
-            if (data.data) {
-              console.log('getExchangeOut has data.data')
-              console.log(data)
-              // {traceId: '1453299.55268.16756163427657642', ret: 223, msg: '积分不足', data: { curScore: 1120, diffScore: 880 }}
-            } else {
-              console.log('getExchangeOut No data.data')
-            }
+              console.log(JSON.parse(data));
           } else {
             console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
-        console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
-        var today = new Date();
-        var now = today.toLocaleString();
-        console.log(now);  
-        console.log('getExchangeOut finaly resolve.')              
         resolve();
       }
     })

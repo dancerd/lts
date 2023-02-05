@@ -154,6 +154,7 @@ async function getExchangequery(){
           if (data) {
             data = JSON.parse(data);
             if (data.data && data.code === 0) {
+              console.log(data.data)
               console.log('可提现金额 -> ' + data.data.canUseCoinAmount)
               // console.log(data.data.exchangeRuleList)
               if (data.data.cashExchangeRuleList) {
