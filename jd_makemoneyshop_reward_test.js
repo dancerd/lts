@@ -80,6 +80,7 @@ if ($.isNode()) {
             if (cash.name === '0.3元现金') {
               continue
             }
+            console.log(' ')
             var today = new Date();
             var now = today.toLocaleString();
             console.log(now);                       

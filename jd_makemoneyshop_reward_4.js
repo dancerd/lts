@@ -1,7 +1,7 @@
 /*
 赚钱大赢家提现
 
-59 59 23 * * * jd_makemoneyshop_reward.js
+58 59 23 * * * jd_makemoneyshop_reward.js
 
 默认不执行
 默认只执行1个ck,多账号请单独指定ck
@@ -9,7 +9,7 @@
 指定某个ck或者某些ck task jd_fruit.js desi JD_COOKIE 1 或者 task jd_fruit.js desi JD_COOKIE 1-5
 
 */
-const $ = new Env("赚钱大赢家提现6");
+const $ = new Env("赚钱大赢家提现mod");
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -41,9 +41,12 @@ if ($.isNode()) {
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
-      $.isNormal = false
+      $.isNormal = true  // ace修改isNormal为true
       message = '';
-      await TotalBean();
+      // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
+      var today = new Date();
+      var now = today.toLocaleString();
+      console.log(now);      
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -54,10 +57,13 @@ if ($.isNode()) {
       }
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-      await getHome()
+      // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
+      // cash.id 2月4日和2月5日都一样
+      // 如果getExchangequery()超时，则cashout仍为空，下面提现逻辑根本不会执行      
       if ($.isNormal) {
+        // 如果cash.id每天不一样，则getExchangequery不可略过
         // await getExchangequery()
-        // await getExchange()
+        //await getExchange()
         if ( true ) {
           // 不确定cash.id是不是每天都一样的。
           // 20元 cash.id  7ea791839f7fe3168150396e51e30917
@@ -65,20 +71,29 @@ if ($.isNode()) {
           // 3 元 cash.id  53515f286c491d66de3e01f64e3810b2
           cashids = ['7ea791839f7fe3168150396e51e30917', 'da3fc8218d2d1386d3b25242e563acb8', '53515f286c491d66de3e01f64e3810b2']
           for (const cashid of cashids) {
+            console.log(' ')            
+            var today = new Date();
+            var now = today.toLocaleString();
+            console.log(now);
             console.log('去提现 -> '+', cashid = '+cashid)
             await getExchangeOut(cashid)
           }
-        }
-        /*
+        } 
+        /*       
         if (cashout) {
           cashout = cashout.reverse()
           // console.log(cashout)
-
           for (const cash of cashout) {
             if (cash.name === '100元现金') {
               continue
             }
-            console.log('去提现 -> '+cash.name+', cash.id = '+cash.id)
+            if (cash.name === '1元现金') {
+              continue
+            }
+            if (cash.name === '0.3元现金') {
+              continue
+            }                        
+            console.log('去提现 -> '+cash.name)
             await getExchangeOut(cash.id)
           }
         }
@@ -111,6 +126,8 @@ async function getHome(){
             if (data.data && data.code === 0) {
               $.isNormal = true
               // console.log('白号')
+            } else {
+              $.isNormal = false
             }
           } else {
             console.log(`京东服务器返回空数据`)
@@ -149,10 +166,9 @@ async function getExchangequery(){
               // console.log(data.data.exchangeRuleList)
               if (data.data.cashExchangeRuleList) {
                 for (const vo of data.data.cashExchangeRuleList) {
-                  // console.log(vo)
+                    console.log(vo)
                   //if (vo.exchangeStatus === 1 && vo.cashoutAmount <= data.data.canUseCoinAmount) {
-                    console.log('可提现 -> ', vo.name)
-                    // 每天可提现的现金等级可能不一样
+                    //console.log('可提现 -> ', vo.name)
                     cashout.push(vo)
                   //}
                 }
@@ -192,8 +208,7 @@ async function getExchange(){
           if (data) {
             data = JSON.parse(data);
             if (data.data && data.ret === 0) {
-              console.log('list data.data.records')
-              console.log(data.data.records)
+              // console.log(data.data.records)
             }
           } else {
             console.log(`京东服务器返回空数据`)
@@ -230,14 +245,22 @@ async function getExchangeOut(id){
             data = JSON.parse(data);
             if (data.data) {
               console.log(data)
+            } else {
+              console.log('getExchangeOut No data.data')
             }
           } else {
             console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
+        console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
+        console.log('getExchangeOut finaly resolve')
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);  
+        console.log('getExchangeOut finaly resolve end time.')              
         resolve();
       }
     })

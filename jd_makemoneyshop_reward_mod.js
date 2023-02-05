@@ -71,6 +71,7 @@ if ($.isNode()) {
           // 3 元 cash.id  53515f286c491d66de3e01f64e3810b2
           cashids = ['7ea791839f7fe3168150396e51e30917', 'da3fc8218d2d1386d3b25242e563acb8', '53515f286c491d66de3e01f64e3810b2']
           for (const cashid of cashids) {
+            console.log(' ')            
             var today = new Date();
             var now = today.toLocaleString();
             console.log(now);
