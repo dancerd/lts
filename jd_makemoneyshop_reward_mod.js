@@ -244,6 +244,7 @@ async function getExchangeOut(id){
           if (data) {
             data = JSON.parse(data);
             if (data.data) {
+              console.log('getExchangeOut data:')
               console.log(data)
             } else {
               console.log('getExchangeOut No data.data')
