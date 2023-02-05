@@ -253,6 +253,10 @@ async function getExchangeOut(id){
         $.logErr(e, resp)
       } finally {
         console.log('getExchangeOut finaly resolve')
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);  
+        console.log('getExchangeOut finaly resolve end time.')              
         resolve();
       }
     })
