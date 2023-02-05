@@ -149,7 +149,7 @@ async function getExchangequery(){
 async function getred(){
   return new Promise(async resolve => {
     const options = {
-      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=b0795152caef79b07ba0e1d7482be60e&sceneval=2`,
+      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=8609ec76a8a70db9a5443376d34fa26a&sceneval=2`,
       headers: {
         'Accept':'*/*',
         'Accept-Encoding': 'gzip, deflate, br',
