@@ -59,6 +59,9 @@ if ($.isNode()) {
         // 如果cash.id每天不一样，则getExchangequery不可略过
         // cash.id 2月4日和2月5日都一样
         // 如果getExchangequery()超时，则cashout仍为空，下面提现逻辑根本不会执行
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);
         await getExchangequery()
         //await getExchange()
         if (cashout) {
@@ -73,7 +76,10 @@ if ($.isNode()) {
             }
             if (cash.name === '0.3元现金') {
               continue
-            }                        
+            }
+            var today = new Date();
+            var now = today.toLocaleString();
+            console.log(now);                       
             console.log('去提现 -> '+cash.name)
             await getExchangeOut(cash.id)
           }
@@ -161,6 +167,10 @@ async function getExchangequery(){
       } catch (e) {
         $.logErr(e, resp)
       } finally {
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);
+        console.log('getExchangequery finally resolve')
         resolve();
       }
     })
@@ -236,6 +246,9 @@ async function getExchangeOut(id){
         console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);        
         console.log('getExchangeOut finaly resolve')
         resolve();
       }
