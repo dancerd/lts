@@ -225,14 +225,18 @@ async function getExchangeOut(id){
             data = JSON.parse(data);
             if (data.data) {
               console.log(data)
+            } else {
+              console.log('getExchangeOut No data.data')
             }
           } else {
             console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
+        console.log('getExchangeOut error')
         $.logErr(e, resp)
       } finally {
+        console.log('getExchangeOut finaly resolve')
         resolve();
       }
     })

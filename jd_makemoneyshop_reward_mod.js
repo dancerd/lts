@@ -55,10 +55,27 @@ if ($.isNode()) {
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
       // await getHome()  //获取账号能否正常参加活动isNormal, 为了减少请求，此处略过, by Ace 2023-02-04
+      // cash.id 2月4日和2月5日都一样
+      // 如果getExchangequery()超时，则cashout仍为空，下面提现逻辑根本不会执行      
       if ($.isNormal) {
         // 如果cash.id每天不一样，则getExchangequery不可略过
-        await getExchangequery()
+        // await getExchangequery()
         //await getExchange()
+        if ( true ) {
+          // 不确定cash.id是不是每天都一样的。
+          // 20元 cash.id  7ea791839f7fe3168150396e51e30917
+          // 8 元 cash.id  da3fc8218d2d1386d3b25242e563acb8
+          // 3 元 cash.id  53515f286c491d66de3e01f64e3810b2
+          cashids = ['7ea791839f7fe3168150396e51e30917', 'da3fc8218d2d1386d3b25242e563acb8', '53515f286c491d66de3e01f64e3810b2']
+          for (const cashid of cashids) {
+            var today = new Date();
+            var now = today.toLocaleString();
+            console.log(now);
+            console.log('去提现 -> '+', cashid = '+cashid)
+            await getExchangeOut(cashid)
+          }
+        } 
+        /*       
         if (cashout) {
           cashout = cashout.reverse()
           // console.log(cashout)
@@ -76,6 +93,7 @@ if ($.isNode()) {
             await getExchangeOut(cash.id)
           }
         }
+        */
       }
     }
   }
