@@ -1,7 +1,7 @@
 /*
 赚钱大赢家兑换50
 
-58 59 23 * * * jd_makemoneyshop_getred.js
+58 59 23 * * * jd_makemoneyshop_getred_mod.js
 
 默认不执行
 默认只执行1个ck,多账号请单独指定ck
@@ -9,7 +9,7 @@
 指定某个ck或者某些ck task jd_fruit.js desi JD_COOKIE 1 或者 task jd_fruit.js desi JD_COOKIE 1-5
 
 */
-const $ = new Env("大赢家兑50红包");
+const $ = new Env("大赢家兑50红包mod");
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -17,9 +17,13 @@ let cookiesArr = [], cookie = '';
 let cashout = []
 let isCashOut = process.env.isCashOut ?? false;
 if ($.isNode()) {
+  console.log('This is Node.js user ')
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
+  for (const cookie of cookiesArr) {
+    console.log('cookie = '+cookie)
+  }
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
   };
 } else {
@@ -54,9 +58,22 @@ if ($.isNode()) {
       }
       $.ADID = getUUID("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", 1);
       $.UUID = getUUID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-	  for (let i of Array(3)){
-	    getred();
-		await $.wait(200);
+      // 50元红包 ruleID: 8609ec76a8a70db9a5443376d34fa26a
+      //  8元红包 ruleID: b141ddd915d20f078d69f6910b02a60a
+      //  3元红包 ruleID: 66d9058514891de12e96588697cc3bb3
+      // rule ID可能会不定期改变
+      ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
+      for (const ruleid of ruleids) {
+        console.log(' ')
+	      for (let i of Array(3)){
+          console.log(' ')            
+          var today = new Date();
+          var now = today.toLocaleString();
+          console.log(now);
+          console.log('去兑换红包 -> '+', ruleid = '+ruleid)
+	        getred(ruleid);
+		      await $.wait(200);
+        }
       }
     }
   }
@@ -146,10 +163,10 @@ async function getExchangequery(){
 
 
 
-async function getred(){
+async function getred(id){
   return new Promise(async resolve => {
     const options = {
-      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=8609ec76a8a70db9a5443376d34fa26a&sceneval=2`,
+      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=${id}&sceneval=2`,
       headers: {
         'Accept':'*/*',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -173,6 +190,10 @@ async function getred(){
       } catch (e) {
         $.logErr(e, resp)
       } finally {
+        var today = new Date();
+        var now = today.toLocaleString();
+        console.log(now);  
+        console.log('getred finaly resolve.')        
         resolve();
       }
     })
