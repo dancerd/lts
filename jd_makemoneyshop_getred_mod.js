@@ -21,7 +21,10 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  // 如果在青龙面板指定全部ck并发 task jd_makemoneyshop_reward.js conc JD_COOKIE，全部CK是同时执行的，并且cookiesArr分别只取得一个对应的cookie
+  // ace: 如果在青龙面板指定全部ck并发: task jd_makemoneyshop_reward.js conc JD_COOKIE，全部CK是同时执行的，并且cookiesArr分别只取得一个对应的cookie
+  // ace: 如果在青龙面板不指定ck: task jd_makemoneyshop_reward.js， 则cookiesArr取得所有cookies, ck执行顺序按本脚本逻辑而定
+  // ace: 如果在青龙面板指定某个ck: task jd_makemoneyshop_reward.js desi JD_COOKIE 1， 则cookiesArr只取得一个对应的cookie
+  // ace: 如果在青龙面板指定某些ck: task jd_makemoneyshop_reward.js desi JD_COOKIE 2-3， 则cookiesArr只取得对应的cookies, ck执行顺序按本脚本逻辑而定
   for (const cookie of cookiesArr) {
     console.log('cookie = '+cookie)
   }
