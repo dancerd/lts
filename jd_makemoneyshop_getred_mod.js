@@ -71,12 +71,12 @@ if ($.isNode()) {
       //  8元红包 ruleID: b141ddd915d20f078d69f6910b02a60a
       //  3元红包 ruleID: 66d9058514891de12e96588697cc3bb3
       // rule ID可能会不定期改变
-      //ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
+      ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
       //ruleids = ['8609ec76a8a70db9a5443376d34fa26a',]
-      ruleids = ['b141ddd915d20f078d69f6910b02a60a',]
+      //ruleids = ['b141ddd915d20f078d69f6910b02a60a',]
       for (const ruleid of ruleids) {
         console.log(' ')
-	      for (let i of Array(1)){
+	      for (let i of Array(3)){
           console.log(' ')            
           var today = new Date();
           console.log(today.toLocaleString());
@@ -84,7 +84,7 @@ if ($.isNode()) {
 	        getred(ruleid);
           // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了?好像还是要等待await $.wait(3000);？
 		      await $.wait(200);
-          await $.wait(3000);
+          // await $.wait(3000);
         }
       }
     }
@@ -200,6 +200,7 @@ async function getred(id){
               try {          
                 console.log(JSON.parse(data));
               } catch (e) {
+                // 可能测试太多，返回html页面提示出错了
                 var today = new Date();
                 console.log(today.toLocaleString());  
                 console.log('getred('+id+') parse error')         

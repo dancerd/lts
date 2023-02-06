@@ -70,7 +70,8 @@ if ($.isNode()) {
           // 8 元 cash.id  da3fc8218d2d1386d3b25242e563acb8  日库存不足
           // 3 元 cash.id  53515f286c491d66de3e01f64e3810b2  库存不足
           // 1 元 cash.id   dac84c6bf0ed0ea9da2eca4694948440  日库存不足
-          cashids = ['da3fc8218d2d1386d3b25242e563acb8', 'dac84c6bf0ed0ea9da2eca4694948440', '7ea791839f7fe3168150396e51e30917',  '53515f286c491d66de3e01f64e3810b2']
+          // cashids = ['da3fc8218d2d1386d3b25242e563acb8', 'dac84c6bf0ed0ea9da2eca4694948440', '7ea791839f7fe3168150396e51e30917',  '53515f286c491d66de3e01f64e3810b2']
+          cashids = ['da3fc8218d2d1386d3b25242e563acb8', 'dac84c6bf0ed0ea9da2eca4694948440']
           for (const cashid of cashids) {
             console.log(' ')            
             var today = new Date();
@@ -247,28 +248,32 @@ async function getExchangeOut(id){
             var today = new Date();
             var now = today.toLocaleString();
             console.log(now);  
-            console.log('getExchangeOut has data:')
+            console.log('getExchangeOut('+id+') has data:')
             console.log(data)  // { traceId: '1938246.55268.16756163431836805', ret: 232, msg: '日库存不足' }
             // { traceId: '1452973.55268.16756163436058014', ret: 224, msg: '库存不足' }
             if (data.data) {
-              console.log('getExchangeOut has data.data')
+              console.log('getExchangeOut('+id+') has data.data')
               console.log(data)
               // {traceId: '1453299.55268.16756163427657642', ret: 223, msg: '积分不足', data: { curScore: 1120, diffScore: 880 }}
             } else {
-              console.log('getExchangeOut No data.data')
+              console.log('getExchangeOut('+id+') No data.data')
             }
           } else {
+            var today = new Date();
+            console.log(today.toLocaleString()); 
             console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
-        console.log('getExchangeOut error')
+        var today = new Date();
+        console.log(today.toLocaleString()); 
+        console.log('getExchangeOut('+id+') error')
         $.logErr(e, resp)
       } finally {
         var today = new Date();
         var now = today.toLocaleString();
         console.log(now);  
-        console.log('getExchangeOut finaly resolve.')              
+        console.log('getExchangeOut('+id+') finaly')              
         resolve();
       }
     })
