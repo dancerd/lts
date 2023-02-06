@@ -187,6 +187,9 @@ async function getred(id){
           console.log(`${JSON.stringify(err)}`)
         } else {
           if (data) {
+              var today = new Date();
+              console.log(today.toLocaleString());  
+              console.log('getred('+id+') data')            
               console.log(JSON.parse(data));
           } else {
             console.log(`京东服务器返回空数据`)
@@ -196,13 +199,13 @@ async function getred(id){
         var today = new Date();
         // var now = today.toLocaleString();
         console.log(today.toLocaleString());  
-        console.log('getred error. ruleid = '+id)         
+        console.log('getred('+id+') error')         
         $.logErr(e, resp)
       } finally {
         var today = new Date();
         var now = today.toLocaleString();
         console.log(now);  
-        console.log('getred finaly resolve: '+id)        
+        console.log('getred('+id+') finally')        
         resolve();
       }
     })
