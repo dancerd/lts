@@ -21,6 +21,7 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
+  // 如果在青龙面板指定全部ck并发 task jd_makemoneyshop_reward.js conc JD_COOKIE，全部CK是同时执行的，并且cookiesArr分别只取得一个对应的cookie
   for (const cookie of cookiesArr) {
     console.log('cookie = '+cookie)
   }
@@ -38,7 +39,7 @@ if ($.isNode()) {
     console.log('默认不执行,需要执行 isCashOut 设置为 true,更多说明看注释')
     return
   }
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 2; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -47,7 +48,7 @@ if ($.isNode()) {
       $.nickName = '';
       $.isNormal = false
       message = '';
-      await TotalBean();
+      // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -70,7 +71,7 @@ if ($.isNode()) {
           var today = new Date();
           var now = today.toLocaleString();
           console.log(now);
-          console.log('去兑换红包 -> '+', ruleid = '+ruleid)
+          console.log('去兑换红包: '+ruleid)
 	        getred(ruleid);
 		      await $.wait(200);
         }
