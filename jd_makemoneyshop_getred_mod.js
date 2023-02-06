@@ -72,7 +72,7 @@ if ($.isNode()) {
       //  3元红包 ruleID: 66d9058514891de12e96588697cc3bb3
       // rule ID可能会不定期改变
       ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
-      ruleids = ['8609ec76a8a70db9a5443376d34fa26a']
+      //ruleids = ['8609ec76a8a70db9a5443376d34fa26a',]
       for (const ruleid of ruleids) {
         console.log(' ')
 	      for (let i of Array(2)){
@@ -195,8 +195,15 @@ async function getred(id){
           if (data) {
               var today = new Date();
               console.log(today.toLocaleString());  
-              console.log('getred('+id+') data')            
-              console.log(JSON.parse(data));
+              console.log('getred('+id+') data')  
+              try {          
+                console.log(JSON.parse(data));
+              } catch (e) {
+                var today = new Date();
+                console.log(today.toLocaleString());  
+                console.log('getred('+id+') parse error')         
+                $.logErr(e, resp)
+              }
           } else {
             console.log(`京东服务器返回空数据`)
           }
