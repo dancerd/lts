@@ -22,9 +22,9 @@ if ($.isNode()) {
     cookiesArr.push(jdCookieNode[item])
   })
   // ace: 如果在青龙面板指定全部ck并发: task jd_makemoneyshop_reward.js conc JD_COOKIE，全部CK是同时执行的，并且cookiesArr分别只取得一个对应的cookie
-  // ace: 如果在青龙面板不指定ck: task jd_makemoneyshop_reward.js， 则cookiesArr取得所有cookies, ck执行顺序按本脚本逻辑而定
+  // ace: 如果在青龙面板不指定ck: task jd_makemoneyshop_reward.js， 则cookiesArr取得所有cookies, ck非并发执行， ck执行顺序按本脚本逻辑而定
   // ace: 如果在青龙面板指定某个ck: task jd_makemoneyshop_reward.js desi JD_COOKIE 1， 则cookiesArr只取得一个对应的cookie
-  // ace: 如果在青龙面板指定某些ck: task jd_makemoneyshop_reward.js desi JD_COOKIE 2-3， 则cookiesArr只取得对应的cookies, ck执行顺序按本脚本逻辑而定
+  // ace: 如果在青龙面板指定某些ck: task jd_makemoneyshop_reward.js desi JD_COOKIE 2-3， 则cookiesArr只取得对应的cookies, ck非并发执行， ck执行顺序按本脚本逻辑而定
   for (const cookie of cookiesArr) {
     console.log('cookie = '+cookie)
   }
@@ -33,8 +33,9 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-//!(async () => {
-(async () => {
+
+// 不管是！(async () => {}还是(async () => {}， 如果不在青龙面板指定全部ck并发: task jd_makemoneyshop_reward.js conc JD_COOKIE， 则ck不会并发执行
+!(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
@@ -43,7 +44,7 @@ if ($.isNode()) {
     console.log('默认不执行,需要执行 isCashOut 设置为 true,更多说明看注释')
     return
   }
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
@@ -71,14 +72,15 @@ if ($.isNode()) {
       //  3元红包 ruleID: 66d9058514891de12e96588697cc3bb3
       // rule ID可能会不定期改变
       ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
+      ruleids = ['8609ec76a8a70db9a5443376d34fa26a']
       for (const ruleid of ruleids) {
         console.log(' ')
-	      for (let i of Array(3)){
+	      for (let i of Array(2)){
           console.log(' ')            
           var today = new Date();
           console.log(today.toLocaleString());
           console.log('去兑换红包: '+ruleid)
-	        //getred(ruleid);
+	        getred(ruleid);
           // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了?好像还是要等待await $.wait(3000);？
 		      await $.wait(200);
           await $.wait(3000);
