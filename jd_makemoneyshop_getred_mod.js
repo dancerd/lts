@@ -33,7 +33,8 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-!(async () => {
+//!(async () => {
+(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
@@ -52,6 +53,9 @@ if ($.isNode()) {
       $.isNormal = false
       message = '';
       // await TotalBean();  // 获取用户名nickName，登录状态isLogin, 为了减少请求，此处略过, by Ace 2023-02-04
+      console.log(' ')            
+      var today = new Date();
+      console.log(today.toLocaleString());      
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
@@ -72,11 +76,10 @@ if ($.isNode()) {
 	      for (let i of Array(3)){
           console.log(' ')            
           var today = new Date();
-          var now = today.toLocaleString();
-          console.log(now);
+          console.log(today.toLocaleString());
           console.log('去兑换红包: '+ruleid)
 	        //getred(ruleid);
-          // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了
+          // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了?好像还是要等待await $.wait(3000);？
 		      await $.wait(200);
           await $.wait(3000);
         }
