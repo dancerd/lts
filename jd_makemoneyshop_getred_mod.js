@@ -75,9 +75,10 @@ if ($.isNode()) {
           var now = today.toLocaleString();
           console.log(now);
           console.log('去兑换红包: '+ruleid)
-	        getred(ruleid);
+	        //getred(ruleid);
           // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了
 		      await $.wait(200);
+          await $.wait(3000);
         }
       }
     }
