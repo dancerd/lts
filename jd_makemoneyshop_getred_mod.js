@@ -178,7 +178,8 @@ async function getExchangequery(){
 async function getred(id){
   return new Promise(async resolve => {
     const options = {
-      url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=${id}&sceneval=2`,
+      //url: `https://wq.jd.com/prmt_exchange/client/exchange?g_ty=h5&g_tk=&appCode=ms2362fc9e&bizCode=makemoneyshop&ruleId=${id}&sceneval=2`,
+      url: `https://api.m.jd.com/api?functionId=jxPrmtExchange_exchange&appid=cs_h5&body=%7B%22bizCode%22%3A%22makemoneyshop%22%2C%22ruleId%22%3A%22${id}%22%2C%22sceneval%22%3A2%2C%22buid%22%3A325%2C%22appCode%22%3A%22%22%2C%22time%22%3A${Date.now()}%2C%22signStr%22%3A%22%22%7D`,      
       headers: {
         'Accept':'*/*',
         'Accept-Encoding': 'gzip, deflate, br',
