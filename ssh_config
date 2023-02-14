@@ -1,0 +1,39 @@
+
+# 如果是多github用户都要使用SSH代理，直接把ProxyCommand写到前面，不用为每个Host写ProxyCommand, Host后面也不必是github.com
+# ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
+ProxyCommand nc -v -x 127.0.0.1:7891 %h %p
+# to test: 在终端 ssh -v -T github.com
+
+
+
+# user bookvp
+# the alias for Host
+# 如果只为单github用户配置SSH代理，Host 后面必须是github.com而不能是其它值, 因为跟我们clone代码时的链接有关
+Host github.com
+    HostName github.com
+    # 如果用默认端口，这里是 github.com，如果想用443端口，这里就是 ssh.github.com 详见 https://help.github.com/articles/using-ssh-over-the-https-port/
+    User user1
+    # IdentityFile ~/.ssh/id_rsa
+    IdentityFile ~/.ssh/id_ed25519
+    # sock5 proxy, use "ProxyCommand nc -v -x 127.0.0.1:1080 %h %p"
+    # ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
+    # clash提供的socks5代理127.0.0.1:7891可以连接成功，但ssh_exchange_identification: Connection closed by remote host. fatal: Could not read from remote repository.
+    # ProxyCommand nc -v -x 127.0.0.1:7891 %h %p
+    # http proxy
+    # clash提供的http代理127.0.0.1:7890可以连接成功，但Could not read from remote repository
+    # ProxyCommand nc -v -X connect -x 127.0.0.1:7890 %h %p
+
+# user dancerd
+# Host后面的名称不能重复,不能都是github.com， 否则第二个github用户可能解析出错
+# 第二个用户Host后面不必是github.com, 只要配置了ProxyCommand也可以连接成功，push成功
+# 第二个用户Host后面的名称也不能随便更改，否则也不能正确解析，可能因为存储在known_hosts了。如果要更改的话，可能需要重新生成ssh key
+Host myname
+    HostName github.com
+    User user2
+    IdentityFile ~/.ssh/id_rsa_dancerd
+    # sock5 proxy
+    # ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
+    # http proxy
+    # ProxyCommand nc -v -X connect -x 127.0.0.1:7890 %h %p  
+
+  
