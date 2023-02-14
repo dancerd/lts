@@ -72,18 +72,18 @@ if ($.isNode()) {
       //  3元红包 ruleID: 66d9058514891de12e96588697cc3bb3
       // rule ID可能会不定期改变
       // ruleids = ['8609ec76a8a70db9a5443376d34fa26a', 'b141ddd915d20f078d69f6910b02a60a']
-      ruleids = ['8609ec76a8a70db9a5443376d34fa26a',]
-      //ruleids = ['b141ddd915d20f078d69f6910b02a60a',]
+      // ruleids = ['8609ec76a8a70db9a5443376d34fa26a',]
+      ruleids = ['b141ddd915d20f078d69f6910b02a60a', '66d9058514891de12e96588697cc3bb3']
       for (const ruleid of ruleids) {
         console.log(' ')
-	      for (let i of Array(2)){
+	      for (let i of Array(3)){
           console.log(' ')            
           var today = new Date();
           console.log(today.toLocaleString());
           console.log('去兑换红包: '+ruleid)
 	        getred(ruleid);
           // async function getred, 不用等待执行完毕， for循环的下一轮已经开始了?好像还是要等待await $.wait(3000);？
-		      await $.wait(500);
+		      await $.wait(400);
           // await $.wait(3000);
         }
       }
